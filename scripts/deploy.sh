@@ -55,6 +55,8 @@ gcloud run deploy n8n \
   --set-env-vars="WEBHOOK_URL=https://${DOMAIN}" \
   --set-env-vars="N8N_PROTOCOL=https" \
   --set-env-vars="N8N_EMAIL=eamon@shopeazy.co" \
+  --set-env-vars="N8N_PORT=5678" \
+  --set-env-vars="N8N_LISTEN_ADDRESS=0.0.0.0" \
   --set-secrets="N8N_ENCRYPTION_KEY=n8n-encryption-key:latest"
 
 echo "3. Mapping custom domain ($DOMAIN)..."

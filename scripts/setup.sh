@@ -81,6 +81,8 @@ SA_EMAIL="${SERVICE_ACCOUNT}@${PROJECT_ID}.iam.gserviceaccount.com"
 if ! gcloud iam service-accounts describe "$SA_EMAIL" &>/dev/null; then
   gcloud iam service-accounts create "$SERVICE_ACCOUNT" \
     --display-name="n8n Cloud Run Service Account"
+  echo "Waiting 10 seconds for IAM propagation..."
+  sleep 10
 else
   echo "Service account $SERVICE_ACCOUNT already exists."
 fi
