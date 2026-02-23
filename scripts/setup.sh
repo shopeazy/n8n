@@ -5,7 +5,9 @@ set -e
 
 # Load environment variables
 if [ -f .env ]; then
-  export $(cat .env | xargs)
+  set -a
+  source .env
+  set +a
 else
   echo "Error: .env file not found. Please copy .env.example to .env and configure it."
   exit 1
