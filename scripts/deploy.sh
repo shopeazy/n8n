@@ -41,22 +41,13 @@ gcloud run deploy n8n \
   --execution-environment gen2 \
   --memory 2Gi \
   --cpu 1 \
-  --min-instances 0 \
+  --no-cpu-throttling \
+  --min-instances 1 \
   --max-instances 2 \
   --add-cloudsql-instances "${PROJECT_ID}:${REGION}:${DB_INSTANCE_NAME}" \
   --add-volume=name=n8n-data,type=cloud-storage,bucket=$BUCKET_NAME \
   --add-volume-mount=volume=n8n-data,mount-path=/home/node/.n8n \
-  --set-env-vars="DB_TYPE=postgresdb" \
-  --set-env-vars="DB_POSTGRESDB_DATABASE=${DB_NAME}" \
-  --set-env-vars="DB_POSTGRESDB_USER=${DB_USER}" \
-  --set-env-vars="DB_POSTGRESDB_PASSWORD=${DB_PASS}" \
-  --set-env-vars="DB_POSTGRESDB_HOST=/cloudsql/${PROJECT_ID}:${REGION}:${DB_INSTANCE_NAME}" \
-  --set-env-vars="N8N_HOST=${DOMAIN}" \
-  --set-env-vars="WEBHOOK_URL=https://${DOMAIN}" \
-  --set-env-vars="N8N_PROTOCOL=https" \
-  --set-env-vars="N8N_EMAIL=eamon@shopeazy.co" \
-  --set-env-vars="N8N_PORT=5678" \
-  --set-env-vars="N8N_LISTEN_ADDRESS=0.0.0.0" \
+  --set-env-vars="DB_TYPE=postgresdb,DB_POSTGRESDB_DATABASE=${DB_NAME},DB_POSTGRESDB_USER=${DB_USER},DB_POSTGRESDB_PASSWORD=${DB_PASS},DB_POSTGRESDB_HOST=/cloudsql/${PROJECT_ID}:${REGION}:${DB_INSTANCE_NAME},N8N_HOST=${DOMAIN},WEBHOOK_URL=https://${DOMAIN},N8N_PROTOCOL=https,N8N_EMAIL=eamon@shopeazy.co,N8N_PORT=5678,N8N_LISTEN_ADDRESS=0.0.0.0,N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false" \
   --set-secrets="N8N_ENCRYPTION_KEY=n8n-encryption-key:latest"
 
 echo "3. Mapping custom domain ($DOMAIN)..."
