@@ -23,19 +23,10 @@ echo "================================================="
 
 gcloud config set project "$PROJECT_ID"
 
-IMAGE_PATH="${REGION}-docker.pkg.dev/${PROJECT_ID}/${AR_REPO}/n8n-custom:${N8N_VERSION}"
+IMAGE_PATH="docker.io/n8nio/n8n:${N8N_VERSION}"
 SA_EMAIL="${SERVICE_ACCOUNT}@${PROJECT_ID}.iam.gserviceaccount.com"
 
-echo "1. Building the Docker Image using Cloud Build..."
-# Passing N8N_VERSION as a build argument
-gcloud builds submit \
-  --tag "$IMAGE_PATH" \
-  --timeout=15m \
-  --machine-type=e2-highcpu-8 \
-  --build-arg="N8N_VERSION=${N8N_VERSION}" \
-  .
-
-echo "2. Deploying to Cloud Run..."
+echo "1. Deploying the official n8n image directly to Cloud Run..."
 # Using Cloud SQL unix socket for Postgres
 # Mounting Cloud Storage for persistent /home/node/.n8n data (binary files)
 # n8n standard port is 5678, so we set the container-port
@@ -68,9 +59,9 @@ gcloud run deploy n8n \
 
 echo "3. Mapping custom domain ($DOMAIN)..."
 # Assuming the user has verified the domain in Cloud Console
-if ! gcloud run domain-mappings describe --domain="$DOMAIN" --region="$REGION" &>/dev/null; then
+if ! gcloud beta run domain-mappings describe --domain="$DOMAIN" --region="$REGION" &>/dev/null; then
   echo "Mapping domain. Check the Cloud Console to grab the DNS records you need to update."
-  gcloud run domain-mappings create \
+  gcloud beta run domain-mappings create \
     --service=n8n \
     --domain="$DOMAIN" \
     --region="$REGION" || true
